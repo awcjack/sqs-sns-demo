@@ -2,7 +2,7 @@ module.exports = {
   target: "node",
   mode: "production",
   entry: {
-    publishToSQS: "./src/controllers/publishToSQS.ts",
+    publishToSNS: "./src/controllers/publishToSNS.ts",
     smsNotification: "./src/controllers/smsNotification.ts",
   },
   module: {
