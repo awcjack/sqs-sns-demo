@@ -1,0 +1,51 @@
+service: sns-notification
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ap-southeast-1
+  stage: ${opt:stage, "development"}
+  profile: default
+  memorySize: 128 # minimum memory size on amazon lambda
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    SQS_URL: ${env:SQS_URL}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - SNS:Publish
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - SQS:SendMessage
+      Resource: "*"     
+
+package:
+  include:
+    - dist/**
+  exclude:
+    - node_modules/**
+    - src/**
+    - package.json
+    - serverless.yml
+
+functions:
+  publishSQSEvent:
+    handler: dist/publishToSQS.publishSQSEvent
+    events:
+      - http:
+          path: /publishSQSEvent
+          method: post
+          cors: true
+
+  sendSMSNotification:
+    handler: dist/smsNotification.sendSMSNotification
+    events:
+      - sqs:
+          arn: arn:aws:sqs:ap-southeast-1:060463786992:test
+
