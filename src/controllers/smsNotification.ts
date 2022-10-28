@@ -8,6 +8,7 @@ interface SQSEventFormat {
 }
 
 export async function sendSMSNotification(event: SQSEvent) {
+  // throw error when record is missing
   if (!event.Records || event.Records.length === 0) {
     throw new Error("Empty Records")
   }
@@ -19,6 +20,7 @@ export async function sendSMSNotification(event: SQSEvent) {
       const requestBody: SQSEventFormat = JSON.parse(event.Records[i].body)
       await sendSMSNotificationFunction(requestBody.phoneNumber, requestBody.message)
     } catch (err) {
+      // mark failed to process those event in sqs
       response.batchItemFailures.push({ itemIdentifier: event.Records[i].messageId })
     }
   }
