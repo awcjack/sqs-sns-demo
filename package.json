@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "lint": "eslint src",
-    "deploy": "webpack && serverless deploy"
+    "deploy": "webpack && serverless deploy",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
