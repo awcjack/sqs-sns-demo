@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent } from "aws-lambda"
-import { publishSQSEvent as publishSQSEventFunction } from "../services/publishToSQS"
+import { publishSNSEvent as publishSNSEventFunction } from "../services/publishToSNS"
 
-interface SQSEventRequest {
+interface SNSEventRequest {
   phoneNumber: string
   message: string
 }
 
-export async function publishSQSEvent(event: APIGatewayProxyEvent) {
+export async function publishSNSEvent(event: APIGatewayProxyEvent) {
   // throw error when missing request body
   if (!event.body) {
     return {
@@ -18,7 +18,7 @@ export async function publishSQSEvent(event: APIGatewayProxyEvent) {
     }
   }
 
-  const requestBody: SQSEventRequest = JSON.parse(event.body)
+  const requestBody: SNSEventRequest = JSON.parse(event.body)
   const E164PhoneNumberRegex = /^\+[0-9]{1,15}$/
   // throw error when missing phone number in request body or wrong phone number format
   if (!requestBody.phoneNumber || !E164PhoneNumberRegex.test(requestBody.phoneNumber)) {
@@ -43,7 +43,7 @@ export async function publishSQSEvent(event: APIGatewayProxyEvent) {
 
 
   try {
-    await publishSQSEventFunction({
+    await publishSNSEventFunction({
       phoneNumber: requestBody.phoneNumber,
       message: requestBody.message
     })
@@ -66,4 +66,4 @@ export async function publishSQSEvent(event: APIGatewayProxyEvent) {
   }
 }
 
-exports.publishSQSEvent = publishSQSEvent
+exports.publishSNSEvent = publishSNSEvent

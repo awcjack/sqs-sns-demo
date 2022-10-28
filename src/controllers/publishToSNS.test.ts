@@ -1,15 +1,15 @@
-import { publishSQSEvent } from "./publishToSQS"
-import { publishSQSEvent as publishSQSEventFunction } from "../services/publishToSQS"
+import { publishSNSEvent } from "./publishToSNS"
+import { publishSNSEvent as publishSNSEventFunction } from "../services/publishToSNS"
 
-jest.mock("../services/publishToSQS", () => ({
-  publishSQSEvent: jest.fn()
+jest.mock("../services/publishToSNS", () => ({
+  publishSNSEvent: jest.fn()
 }))
 
 describe("Test case for HTTP event", () => {
   it("Normal event", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({
+    const result = await publishSNSEvent({
       body: "{\"phoneNumber\":\"+123\",\"message\":\"hello world\"}" 
     })
     expect(result).toEqual({
@@ -18,7 +18,7 @@ describe("Test case for HTTP event", () => {
         ok: 1
       }),
     })
-    expect(publishSQSEventFunction).toBeCalledWith({
+    expect(publishSNSEventFunction).toBeCalledWith({
       phoneNumber: "+123",
       message: "hello world"
     })
@@ -27,7 +27,7 @@ describe("Test case for HTTP event", () => {
   it("Invalid phone number event", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({
+    const result = await publishSNSEvent({
       body: "{\"phoneNumber\":\"+1234567891234567890\",\"message\":\"hello world\"}"
     })
     expect(result).toEqual({
@@ -42,7 +42,7 @@ describe("Test case for HTTP event", () => {
   it("Missing phone number event", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({
+    const result = await publishSNSEvent({
       body: "{\"message\":\"hello world\"}"
     })
     expect(result).toEqual({
@@ -57,7 +57,7 @@ describe("Test case for HTTP event", () => {
   it("Missing message event", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({
+    const result = await publishSNSEvent({
       body: "{\"phoneNumber\":\"+123\"}" 
     })
     expect(result).toEqual({
@@ -72,7 +72,7 @@ describe("Test case for HTTP event", () => {
   it("Missing body", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({})
+    const result = await publishSNSEvent({})
     expect(result).toEqual({
       statusCode: 400,
       body: JSON.stringify({
@@ -82,13 +82,13 @@ describe("Test case for HTTP event", () => {
     })
   })
 
-  it("Error from SQS", async () => {
+  it("Error from SNS", async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    publishSQSEventFunction.mockRejectedValue("Mocking Error")
+    publishSNSEventFunction.mockRejectedValue("Mocking Error")
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await publishSQSEvent({
+    const result = await publishSNSEvent({
       body: "{\"phoneNumber\":\"+123\",\"message\":\"hello world\"}" 
     })
     expect(result).toEqual({
