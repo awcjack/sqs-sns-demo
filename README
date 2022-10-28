@@ -1,0 +1,11 @@
+Application that use AWS SQS and AWS SNS for sending out SMS notification to user
+
+POST /publishSQSEvent
+```json
+{
+    "phoneNumber": "phone number in E.164 format (+123456789)",
+    "message": "text message that expected to send to user"
+}
+```
+
+SQS queue will trigger smsNotification lambda function for sending out SMS
