@@ -1,7 +1,7 @@
 import AWS from "aws-sdk"
 
 export async function sendSMSNotification(phoneNumber: string, message: string) {
-  // init aws sqs with explicitly credential from env
+  // init aws sns with explicitly credential from env
   const sns = new AWS.SNS({
     region: process.env.AWS_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
