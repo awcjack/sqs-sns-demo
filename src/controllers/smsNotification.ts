@@ -17,8 +17,9 @@ export async function sendSMSNotification(event: SQSEvent) {
 
   for (let i = 0; i < event.Records.length; i++) {
     try {
-      const requestBody: SQSEventFormat = JSON.parse(event.Records[i].body)
-      await sendSMSNotificationFunction(requestBody.phoneNumber, requestBody.message)
+      const requestBody = JSON.parse(event.Records[i].body)
+      const message: SQSEventFormat = JSON.parse(requestBody.Message)
+      await sendSMSNotificationFunction(message.phoneNumber, message.message)
     } catch (err) {
       // mark failed to process those event in sqs
       response.batchItemFailures.push({ itemIdentifier: event.Records[i].messageId })
