@@ -1,0 +1,33 @@
+{
+  "name": "sns-notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "lint": "eslint src",
+    "deploy": "webpack && serverless deploy"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.108",
+    "@types/jest": "^29.2.0",
+    "@types/node": "^18.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
+    "eslint": "^8.26.0",
+    "jest": "^29.2.2",
+    "serverless": "^3.23.0",
+    "ts-jest": "^29.0.3",
+    "ts-loader": "^9.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "author": "Jack Chan",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1242.0",
+    "lodash": "^4.17.15"
+  }
+}
