@@ -9,7 +9,7 @@ provider:
   memorySize: 128 # minimum memory size on amazon lambda
   environment:
     NODE_ENV: ${self:provider.stage}
-    SQS_URL: ${env:SQS_URL}
+    SNS_ARN: ${env:SNS_ARN}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,11 +35,11 @@ package:
     - serverless.yml
 
 functions:
-  publishSQSEvent:
-    handler: dist/publishToSQS.publishSQSEvent
+  publishSNSEvent:
+    handler: dist/publishToSNS.publishSNSEvent
     events:
       - http:
-          path: /publishSQSEvent
+          path: /publishSNSEvent
           method: post
           cors: true
 
@@ -47,5 +47,5 @@ functions:
     handler: dist/smsNotification.sendSMSNotification
     events:
       - sqs:
-          arn: arn:aws:sqs:ap-southeast-1:060463786992:test
+          arn: ${env:SQS_ARN}
 
