@@ -1,6 +1,10 @@
 Application that use AWS SQS and AWS SNS for sending out SMS notification to user
 
-POST /publishSQSEvent
+Requirement: FIFO SQS Queue and FIFO SNS Topic
+environment: SNS_ARN for FIFO SNS Topic Arn and SQS_ARN for FIFO SQS Queue Arn
+
+Publish message to SNS
+POST /publishSNSEvent
 ```json
 {
     "phoneNumber": "phone number in E.164 format (+123456789)",
@@ -8,4 +12,6 @@ POST /publishSQSEvent
 }
 ```
 
-SQS queue will trigger smsNotification lambda function for sending out SMS
+Manual subscribe SQS Queue to SNS topic
+
+SQS queue trigger smsNotification lambda function for sending out SMS
